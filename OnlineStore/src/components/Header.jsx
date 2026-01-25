@@ -11,6 +11,13 @@ function Header(props) {
                 <a href="#" className="nav-link">About</a>
                 <a href="#" className="nav-link">Contact</a>
             </nav>
+
+            <div className="cart-container">
+                <span className="cart-icon">🛒</span>
+                {props.cartCount > 0 && (
+                    <span className="cart-count">{props.cartCount}</span>
+                )}
+            </div>
         </header>
     );
 }

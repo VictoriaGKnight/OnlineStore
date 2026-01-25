@@ -31,3 +31,47 @@
 .nav-link:hover {
     color: #C9184A;
 }
+
+.cart-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+}
+
+.cart-icon {
+    cursor: pointer;
+}
+
+.cart-count {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #C9184A;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    width: 18px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
