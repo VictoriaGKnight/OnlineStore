@@ -1,13 +1,12 @@
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
-import ProductCard from './components/ProductCard';
+import './App.css';
 import Header from './components/Header';
-import Hero from './components/Hero';
 import Footer from './components/Footer';
-import { useState } from "react";
-import CartItem from "./components/CartItem"
+
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import ProductsPage from './pages/ProductsPage';
+import CartPage from './pages/CartPage';
+import { useState, useEffect } from "react";
 
 function App() {
 
@@ -35,7 +34,26 @@ function App() {
   }
  ] 
 
- const [cart, setCart] = useState([]); 
+ const [cart, setCart] = useState(() => {
+  try {
+    const savedCart = localStorage.getItem("componentcorner-cart")
+    return savedCart ? JSON.parse(savedCart) : [];
+  } catch (error) {
+    console.warn("Could not load cart from localStorage:", error);
+    return [];
+  }
+ });
+
+ useEffect(() => {
+  try {
+    localStorage.setItem(
+      "componentcorner-cart",
+      JSON.stringify(cart)
+    );
+  } catch (error) {
+    console.warn("Could not save cart to localStorage:", error);
+  }
+ }, [cart]);
 
  const addToCart = (product) => {
   console.log("adding to cart:", product);
@@ -52,63 +70,46 @@ function App() {
  );
 
  return(
-  <div className="app">
-    <Header 
-      storeName="Online Craft store"
-      cartCount={cart.length} 
-    /> 
-    
-
-    <Hero
-      title="Hand-Made Goods!"
-      subtitle="Find unique, custom made products you'll love"
-      ctaText="Show Now"
-      image="https://placehold.co/1200x400/FFb3C1/D3d3d3?text=Welcome+%3C3"
-    />
-
-    <h1>Best sellers!</h1>
-
-    {products.map(product => (
-      <ProductCard
-        key={product.id}
-        product={product}
-        onAddToCart={addToCart}
+  <BrowserRouter>
+    <div className="app">
+      <Header
+        storeName="Online Craft store"
+        cartCount={cart.length}
       />
-    ))}
 
-    <div className="shopping-cart">
-      <h2>Your Shopping Cart:</h2>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+
+        <Route
+          path="/products"
+          element={
+            <ProductsPage
+              products={products}
+              addToCart={addToCart}
+            />
+          }
+        />
+
+        <Route
+          path="/cart"
+          element={
+            <CartPage
+              cart={cart}
+              removeFromCart={removeFromCart}
+              cartTotal={cartTotal}
+            />
+          }
+        />
+      </Routes>
+
+      <Footer
+        storeName="Online Craft Store"
+        email="lovecrafts@create.com"
+        phone="(123) 456-7890"
+        address="123 Maker Street, lovesville, SC 12345"
+      />
     </div>
-
-    {cart.length > 0 ? (
-      <>
-        {cart.map(item => (
-          <CartItem
-            key={item.id}
-            item={item}
-            onRemove={removeFromCart}
-          />
-        ))}
-
-        <h4 className="cart-total">
-          Total: ${cartTotal.toFixed(2)}
-        </h4>
-      </>
-    ) : (
-      <div className="empty-cart">
-        <p>Aww! Your cart is empty.</p>
-        <p>Add something now!</p>
-      </div>
-    )}
-
-    <Footer
-      storeName="Online Craft Store"
-      email="lovecrafts@create.com"
-      phone="(123) 456-7890"
-      address="123 Maker Street, lovesville, SC 12345"
-    />
-           
-  </div>
+  </BrowserRouter>
  );
 }
 
