@@ -1,4 +1,5 @@
 import './Header.css';
+import { Link } from "react-router-dom";
 
 function Header(props) {
     return (
@@ -6,18 +7,17 @@ function Header(props) {
             <h2 className="logo">{props.storeName}</h2>
 
             <nav className="nav-menu">
-                <a href="#" className="nav-link">Home</a>
-                <a href="#" className="nav-link">Products</a>
-                <a href="#" className="nav-link">About</a>
-                <a href="#" className="nav-link">Contact</a>
+                <Link to="/" className="nav-link">Home</Link>
+                <Link to="/products" className="nav-link">Products</Link>
+                <Link to="/cart" className="nav-link">Cart</Link>
             </nav>
 
-            <div className="cart-container">
-                <span className="cart-icon">🛒</span>
+            <Link to="/cart" className="cart-container">
+                <span className="cart-icon">🛒</span>   
                 {props.cartCount > 0 && (
                     <span className="cart-count">{props.cartCount}</span>
                 )}
-            </div>
+            </Link>
         </header>
     );
 }
